@@ -1,111 +1,51 @@
-import { StatusBar } from "expo-status-bar";
+import StartGameScreen from "@/screens/StartGameScreen";
+import { ImageBackground, StyleSheet } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import GameScreen from "@/screens/GameScreen";
+import GameOverScreen from "@/screens/GameOverScreen";
+// import { StatusBar } from "expo-status-bar";
 
-const colors = {
+export const colors = {
   transparentYellow: "rgba(255, 215, 0, 0.3)",
-  goldenYellow: "#FFD700",
-  darkRed: "#800000",
+  goldenYellow: "#ddb52f",
+  darkRed: "#4e0329",
   lightRed: "#A52A2A",
   white: "#FFFFFF",
 };
 
 export default function Index() {
-  const [query, setQuery] = useState("");
-
-  const onConfirm = () => setQuery(query);
-
-  const onReset = () => setQuery("");
+  const [screenNumber, setScreenNumber] = useState<number>(3);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Guess My Number</Text>
-      </View>
-      <View style={styles.numberContainer}>
-        <Text style={styles.numberTitle}>Enter A Number</Text>
-        <TextInput
-          keyboardType="numeric"
-          value={query}
-          onChangeText={setQuery}
-          placeholder="Enter your choice"
-          style={styles.input}
-        />
-        <View style={styles.buttonRow}>
-          <Pressable onPress={onReset} style={styles.actionButton}>
-            <View>
-              <Text style={styles.buttonText}>Reset</Text>
-            </View>
-          </Pressable>
-          <Pressable onPress={onConfirm} style={styles.actionButton}>
-            <View>
-              <Text style={styles.buttonText}>Confirm</Text>
-            </View>
-          </Pressable>
-        </View>
-      </View>
+    <LinearGradient
+      colors={[colors.darkRed, colors.goldenYellow]}
+      style={styles.rootScreen}
+    >
+      <ImageBackground
+        source={require("../assets/images/background.png")}
+        resizeMode="cover"
+        imageStyle={styles.backgroundImage}
+      >
+        {screenNumber === 1 && (
+          <StartGameScreen setScreenNumber={setScreenNumber} />
+        )}
+        {screenNumber === 2 && <GameScreen setScreenNumber={setScreenNumber} />}
+        {screenNumber === 3 && (
+          <GameOverScreen setScreenNumber={setScreenNumber} />
+        )}
+      </ImageBackground>
 
-      <StatusBar style="auto" />
-    </View>
+      {/* <StatusBar style="auto" /> */}
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  rootScreen: {
     flex: 1,
-    backgroundColor: colors.transparentYellow,
-    alignItems: "center",
-    justifyContent: "center",
   },
-  header: {
-    borderWidth: 2,
-    // borderColor: colors.white,
-    padding: 10,
-    marginBottom: 20,
-    borderRadius: 10,
-  },
-  headerText: {
-    fontSize: 36,
-    // color: colors.white,
-  },
-  numberContainer: {
-    backgroundColor: colors.darkRed,
-    padding: 20,
-    borderRadius: 10,
-    alignItems: "center",
-    width: 400,
-  },
-  numberTitle: {
-    fontSize: 24,
-    color: colors.goldenYellow,
-    marginBottom: 10,
-  },
-  input: {
-    height: 40,
-    width: "100%",
-    color: colors.goldenYellow,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    borderBottomColor: colors.goldenYellow,
-    borderBottomWidth: 2,
-    marginBottom: 20,
-  },
-  buttonRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-  },
-  actionButton: {
-    backgroundColor: colors.lightRed,
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    flex: 1,
-    marginHorizontal: 5,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: colors.white,
-    fontSize: 16,
+  backgroundImage: {
+    opacity: 0.5,
   },
 });
